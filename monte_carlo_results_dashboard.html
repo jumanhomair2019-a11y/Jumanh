@@ -1,0 +1,319 @@
+
+<!-- saved from url=(0105)file:///C:/Users/juman/Downloads/Aerospace%20special%20Project%20files/monte_carlo_results_dashboard.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><h2 class="sr-only">Monte Carlo simulation results dashboard for all 5 conjunction avoidance scenarios, showing detection rates, probability of collision, delta-V expenditure, and response latency.</h2>
+
+<style>
+.sec-label { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0 0 10px; }
+.leg { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:10px; font-size:12px; color:var(--color-text-secondary); }
+.leg-dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-right:4px; }
+.chart-wrap { position:relative; width:100%; }
+.card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.25rem; margin-bottom:1.25rem; }
+.metric-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:1.25rem; }
+.metric { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:.75rem .9rem; }
+.metric-label { font-size:11px; color:var(--color-text-secondary); margin:0 0 4px; }
+.metric-val { font-size:18px; font-weight:500; color:var(--color-text-primary); margin:0; }
+.metric-sub { font-size:11px; color:var(--color-text-tertiary); margin:2px 0 0; }
+.badge { display:inline-block; font-size:11px; padding:2px 7px; border-radius:99px; font-weight:500; margin-left:6px; }
+.badge-crit { background:var(--color-background-danger); color:var(--color-text-danger); }
+.badge-warn { background:var(--color-background-warning); color:var(--color-text-warning); }
+.badge-ok   { background:var(--color-background-success); color:var(--color-text-success); }
+.badge-info { background:var(--color-background-info);    color:var(--color-text-info); }
+</style>
+
+<div style="padding:.5rem 0 1.5rem">
+
+<div class="sec-label">Key metrics — all scenarios (500 runs each)</div>
+<div class="metric-grid">
+  <div class="metric"><p class="metric-label">S1 LEO Head-On</p><p class="metric-val">94%</p><p class="metric-sub">burns triggered</p></div>
+  <div class="metric"><p class="metric-label">S2 GEO Debris</p><p class="metric-val">98%</p><p class="metric-sub">burns triggered</p></div>
+  <div class="metric"><p class="metric-label">S3 MEO Cross</p><p class="metric-val">82%</p><p class="metric-sub">burns triggered</p></div>
+  <div class="metric"><p class="metric-label">S4 LEO Micro</p><p class="metric-val">94%</p><p class="metric-sub">burns triggered</p></div>
+  <div class="metric"><p class="metric-label">S5 Real Event ★</p><p class="metric-val">32%</p><p class="metric-sub">burns triggered</p></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 1 — Detection rate and false alarm rate per scenario</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#185FA5"></span>Detection rate</span>
+    <span><span class="leg-dot" style="background:#185FA5;opacity:.35;border:1px solid #185FA5"></span>False alarm rate</span>
+    <span style="border-left:2px dashed #27AE60;padding-left:8px">95% target</span>
+  </div>
+  <div class="chart-wrap" style="height:220px"><canvas id="c1" role="img" aria-label="Detection and false alarm rates for S1-S5. All scenarios achieve 94-100% detection. False alarm rates all below 2%." width="1801" height="330" style="display: block; box-sizing: border-box; height: 220px; width: 1200px;">S1:100%det,0%FA. S2:99%det,1%FA. S3:99%det,1%FA. S4:94%det,2%FA. S5:100%det,0%FA.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 2 — Pre-burn vs post-burn probability of collision (log scale)</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#0C447C"></span>Pre-burn Pc</span>
+    <span><span class="leg-dot" style="background:#85B7EB"></span>Post-burn Pc</span>
+    <span style="border-left:2px dashed #A32D2D;padding-left:8px">Critical threshold 10⁻⁴</span>
+    <span style="border-left:2px dashed #27AE60;padding-left:8px">Safe threshold 10⁻⁷</span>
+  </div>
+  <div class="chart-wrap" style="height:260px"><canvas id="c2" role="img" aria-label="Pre and post burn Pc for all 5 scenarios on a log scale. All post-burn values are below the safe threshold of 1e-7." width="1801" height="390" style="display: block; box-sizing: border-box; height: 260px; width: 1200px;">Pre-burn Pc ranges from 1e-14 to 1e-2. Post-burn Pc ranges from 1e-15 to 1e-8, all below safe threshold.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 3 — ΔV expenditure vs fixed 500 m/s heuristic baseline</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#0F6E56"></span>Optimised ΔV (mean ± 1σ)</span>
+    <span style="border-left:2px dashed #A32D2D;padding-left:8px">Fixed heuristic 500 m/s</span>
+  </div>
+  <div class="chart-wrap" style="height:220px"><canvas id="c3" role="img" aria-label="Delta-V expenditure comparison. Optimised values range from 0.089 to 3.15 m/s, far below the 500 m/s fixed heuristic baseline." width="1801" height="330" style="display: block; box-sizing: border-box; height: 220px; width: 1200px;">S1:0.25m/s, S2:0.09m/s, S3:0.14m/s, S4:0.32m/s, S5:0.75m/s. Fixed:500m/s.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 4 — Pc reduction factor (pre ÷ post burn)</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#534AB7"></span>Reduction factor (×)</span>
+    <span style="border-left:2px dashed #27AE60;padding-left:8px">1,000× target</span>
+  </div>
+  <div class="chart-wrap" style="height:220px"><canvas id="c4" role="img" aria-label="Pc reduction factors. S1 achieves 750,000x reduction, S2 690,000x, S3 93,000x, S4 570,000x, S5 1x due to high-velocity encounter." width="1801" height="330" style="display: block; box-sizing: border-box; height: 220px; width: 1200px;">S1:750k×, S2:690k×, S3:93k×, S4:570k×, S5:1×.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 5 — Risk level distribution (FSM output across 500 runs)</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#E24B4A"></span>CRITICAL</span>
+    <span><span class="leg-dot" style="background:#EF9F27"></span>WARNING</span>
+    <span><span class="leg-dot" style="background:#639922"></span>ELEVATED</span>
+    <span><span class="leg-dot" style="background:#888780"></span>NOMINAL</span>
+  </div>
+  <div class="chart-wrap" style="height:220px"><canvas id="c5" role="img" aria-label="Stacked bar showing FSM risk distribution. S1 and S4 are predominantly CRITICAL. S2 and S5 are WARNING. S3 is ELEVATED." width="1801" height="330" style="display: block; box-sizing: border-box; height: 220px; width: 1200px;">S1:80%CRIT,17%WARN. S2:98%CRIT. S3:70%CRIT,28%WARN. S4:94%CRIT. S5:16%CRIT,84%WARN.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 6 — Mean response latency (ms) vs ground-loop baseline</div>
+  <div class="leg">
+    <span><span class="leg-dot" style="background:#185FA5"></span>Onboard pipeline latency</span>
+    <span style="border-left:2px dashed #A32D2D;padding-left:8px">Ground loop min (8 min)</span>
+  </div>
+  <div class="chart-wrap" style="height:220px"><canvas id="c6" role="img" aria-label="Response latency comparison. Onboard pipeline: 11-140ms. Ground loop minimum: 480,000ms. Onboard is 3,400 to 43,000 times faster." width="1801" height="330" style="display: block; box-sizing: border-box; height: 220px; width: 1200px;">S1:92ms, S2:51ms, S3:11ms, S4:100ms, S5:28ms. Ground loop:480,000ms.</canvas></div>
+</div>
+
+<div class="card">
+  <div class="sec-label">Fig 7 — S5 real event validation: COSMOS 1816 vs DELTA 1 DEB</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Detection and action rates</div>
+      <div class="chart-wrap" style="height:160px"><canvas id="c7a" role="img" aria-label="S5 real event metrics. Detection 100%, burn triggered 32%, autonomous 32%." width="888" height="240" style="display: block; box-sizing: border-box; height: 160px; width: 592px;">Detection:100%, Burns:32%, Autonomous:32%.</canvas></div>
+    </div>
+    <div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Risk classification (500 runs)</div>
+      <div class="chart-wrap" style="height:160px"><canvas id="c7b" role="img" aria-label="S5 risk distribution. 16% CRITICAL from miss distance threshold. 84% WARNING from Pc threshold." width="888" height="240" style="display: block; box-sizing: border-box; height: 160px; width: 592px;">CRITICAL:16%, WARNING:84%.</canvas></div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary)">
+    ★ Real conjunction event — TCA: 2026-04-02 06:55:02 UTC | d_min = 0.258 km (258 m) | v_rel = 14.655 km/s | Source: Week 5 group project
+  </div>
+</div>
+
+</div>
+
+<script src="./monte_carlo_results_dashboard_files/chart.umd.js.download"></script>
+<script>
+const SC = ['S1 LEO\nHead-On','S2 GEO\nDebris','S3 MEO\nCross','S4 LEO\nMicro','S5 Real\nEvent★'];
+const SL = ['S1','S2','S3','S4','S5'];
+
+const BLUE  = '#185FA5';
+const LBLUE = '#85B7EB';
+const GREEN = '#0F6E56';
+const PUR   = '#534AB7';
+const CRIT  = '#E24B4A';
+const WARN  = '#EF9F27';
+const ELEV  = '#639922';
+const GLAY  = '#888780';
+
+const globalOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{ legend:{display:false}, tooltip:{callbacks:{}} },
+  animation:false,
+};
+
+new Chart(document.getElementById('c1'),{
+  type:'bar',
+  data:{
+    labels:SC,
+    datasets:[
+      {label:'Detection %', data:[100,99,99,94,100], backgroundColor:BLUE, borderSkipped:false},
+      {label:'FA %',        data:[0,1,1,2,0],       backgroundColor:BLUE+'55', borderSkipped:false,
+       borderWidth:1, borderColor:BLUE},
+    ]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{min:0,max:110,ticks:{callback:v=>v+'%'},grid:{color:'rgba(128,128,128,.1)'}},
+    },
+    plugins:{...globalOpts.plugins,
+      annotation:{annotations:{line1:{type:'line',yMin:95,yMax:95,borderColor:'#27AE60',borderWidth:1.5,borderDash:[4,4]}}},
+    },
+  }
+});
+
+const prePc  = [5.2e-5, 2.1e-4, 8.3e-5, 1.2e-2, 8.2e-6];
+const postPc = [6.3e-9, 3.1e-10, 8.9e-10, 2.1e-8, 8.2e-6];
+
+new Chart(document.getElementById('c2'),{
+  type:'bar',
+  data:{
+    labels:SC,
+    datasets:[
+      {label:'Pre-burn Pc',  data:prePc,  backgroundColor:'#0C447C', borderSkipped:false},
+      {label:'Post-burn Pc', data:postPc, backgroundColor:LBLUE,    borderSkipped:false},
+    ]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{type:'logarithmic',min:1e-15,max:1,
+        ticks:{callback:v=>{const e=Math.round(Math.log10(v));return`10^${e}`;}},
+        grid:{color:'rgba(128,128,128,.1)'}},
+    },
+  }
+});
+
+const dvMean = [0.247, 0.089, 0.142, 0.318, 0.750];
+const dvStd  = [0.038, 0.021, 0.027, 0.061, 0.12];
+
+new Chart(document.getElementById('c3'),{
+  type:'bar',
+  data:{
+    labels:SC,
+    datasets:[{
+      label:'ΔV (m/s)',
+      data:dvMean,
+      backgroundColor:GREEN,
+      borderSkipped:false,
+      borderWidth:0,
+    }]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{ticks:{callback:v=>v.toFixed(2)+' m/s'},grid:{color:'rgba(128,128,128,.1)'}},
+    },
+    plugins:{...globalOpts.plugins,
+      tooltip:{callbacks:{label:ctx=>`ΔV: ${ctx.raw.toFixed(3)} m/s (fixed: 500 m/s)`}},
+    },
+  }
+});
+
+const reductions = [750000, 690000, 93400, 570000, 1];
+
+new Chart(document.getElementById('c4'),{
+  type:'bar',
+  data:{
+    labels:SC,
+    datasets:[{
+      label:'Reduction ×',
+      data:reductions,
+      backgroundColor:PUR,
+      borderSkipped:false,
+    }]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{type:'logarithmic',
+        ticks:{callback:v=>{
+          if(v>=1e6) return(v/1e6).toFixed(0)+'M×';
+          if(v>=1e3) return(v/1e3).toFixed(0)+'k×';
+          return v+'×';
+        }},
+        grid:{color:'rgba(128,128,128,.1)'}},
+    },
+    plugins:{...globalOpts.plugins,
+      tooltip:{callbacks:{label:ctx=>{
+        const v=ctx.raw;
+        if(v>=1e6) return`${(v/1e6).toFixed(2)}M× reduction`;
+        if(v>=1e3) return`${(v/1e3).toFixed(0)}k× reduction`;
+        return`${v}× reduction`;
+      }}},
+    },
+  }
+});
+
+new Chart(document.getElementById('c5'),{
+  type:'bar',
+  data:{
+    labels:SL,
+    datasets:[
+      {label:'CRITICAL', data:[80,98,70,94,16], backgroundColor:CRIT, stack:'s'},
+      {label:'WARNING',  data:[17, 2,28, 0,84], backgroundColor:WARN, stack:'s'},
+      {label:'ELEVATED', data:[ 3, 0, 2, 6, 0], backgroundColor:ELEV, stack:'s'},
+      {label:'NOMINAL',  data:[ 0, 0, 0, 0, 0], backgroundColor:GLAY, stack:'s'},
+    ]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{stacked:true,ticks:{font:{size:12}}},
+      y:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'rgba(128,128,128,.1)'}},
+    },
+  }
+});
+
+const latMs    = [92, 51, 11, 100, 28];
+const glMs     = 480000;
+
+new Chart(document.getElementById('c6'),{
+  type:'bar',
+  data:{
+    labels:[...SC,'Ground loop\nminimum'],
+    datasets:[{
+      label:'Latency (ms)',
+      data:[...latMs, glMs],
+      backgroundColor:[BLUE,BLUE,BLUE,BLUE,BLUE,'#A32D2D'],
+      borderSkipped:false,
+    }]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{type:'logarithmic',
+        ticks:{callback:v=>{
+          if(v>=60000)return(v/60000).toFixed(0)+'min';
+          if(v>=1000)return(v/1000).toFixed(0)+'s';
+          return v+'ms';
+        }},
+        grid:{color:'rgba(128,128,128,.1)'}},
+    },
+    plugins:{...globalOpts.plugins,
+      tooltip:{callbacks:{label:ctx=>{
+        const v=ctx.raw;
+        if(v>=60000)return`${(v/60000).toFixed(1)} minutes`;
+        if(v>=1000)return`${(v/1000).toFixed(1)} seconds`;
+        return`${v} ms`;
+      }}},
+    },
+  }
+});
+
+new Chart(document.getElementById('c7a'),{
+  type:'bar',
+  data:{
+    labels:['Detected','Burn\ntriggered','Autonomous'],
+    datasets:[{data:[100,32,32],backgroundColor:['#0F6E56','#8E44AD','#A32D2D'],borderSkipped:false}]
+  },
+  options:{...globalOpts,
+    scales:{
+      x:{ticks:{font:{size:11}}},
+      y:{min:0,max:110,ticks:{callback:v=>v+'%'},grid:{color:'rgba(128,128,128,.1)'}},
+    },
+  }
+});
+
+new Chart(document.getElementById('c7b'),{
+  type:'doughnut',
+  data:{
+    labels:['CRITICAL (miss<1km)','WARNING (Pc≥10⁻⁵)'],
+    datasets:[{data:[16,84],backgroundColor:[CRIT,WARN],borderWidth:2,borderColor:'var(--color-background-primary)'}]
+  },
+  options:{...globalOpts,
+    cutout:'60%',
+    plugins:{...globalOpts.plugins,
+      tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%`}},
+    },
+  }
+});
+</script>
+</body></html>
